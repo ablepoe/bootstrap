@@ -17,24 +17,29 @@
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 <!--[if lt IE 9]>
-      <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+      <script src="plugins/html5shiv-master/html5shiv.min.js"></script>
+      <script src="plugins/Respond-master/respond.min.js"></script>
     <![endif]-->
 
 <style>
 body {
 	padding-top: 50px;
+	margin-bottom: 50px;
 }
 
 .carousel {
 	height: 300px;
 	background-color: #000;
 	margin-bottom: 50px;
+	width: 100%;
+	
 }
 
 .carousel .item {
 	height: 300px;
 	background-color: #000;
+	width: 100%;
+	
 }
 
 .carousel img {
@@ -44,6 +49,10 @@ body {
 hr.divider {
 	margin-top: 50px;
 }
+
+
+
+
 </style>
 </head>
 <body>
@@ -53,7 +62,7 @@ hr.divider {
 		<!-- 声明自适应屏幕大小，并且居中 -->
 		<!-- <div class="container-fluid"> -->
 		<!-- 自适应居中 -->
-		<div class="container">
+		<div class="container" id="topbarContainer">
 			<!-- 缩放时的样式 -->
 			<div class="navbar-header">
 				<!-- class指定按钮的类   data-toggle代表其是collapse展开项  data-target指定展开项的目标 -->
@@ -83,7 +92,14 @@ hr.divider {
 							<li class="disabled"><a href="#">系统功能</a></li>
 							<li><a href="#">设置</a></li>
 						</ul></li>
-					<li><a href="#">帮助</a></li>
+					<li><a href="#" data-toggle="modal" data-target="#helpModal">帮助</a></li>
+					<li class="dropdown" id="demo-navbar"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Tab页面同步跳转<span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+							<li><a href="#tab-chrome" id="tab_chrome" onclick="tabShow('tab_chrome')">Chrome</a></li>
+							<li><a href="#tab-firefox" id="tab_firefox" onclick="tabShow('tab_firefox')">Firefox</a></li>
+							<li><a href="#tab-ie" id="tab_ie" onclick="tabShow('tab_ie')">IE</a></li>
+						</ul>
+					</li>
 					<li><input type="text" class="form-control" id="username"
 						placeholder="用户名..." style="margin-top: 10px" /></li>
 					<li><input type="password" class="form-control" id="username"
@@ -96,6 +112,8 @@ hr.divider {
 			</div>
 		</div>
 	</nav>
+
+	<div class="container" id="carouselContainer">
 
 	<!-- 滑动屏幕 -->
 	<div id="carousel-example-generic" class="carousel slide"
@@ -138,8 +156,10 @@ hr.divider {
 			<span class="sr-only">Next</span>
 		</a>
 	</div>
+	
+	</div>
 
-	<div class="container">
+	<div class="container" id="contentContainer">
 		<div class="row">
 			<div class="col-md-4">
 				<h1>Chrome</h1>
@@ -157,7 +177,7 @@ hr.divider {
 
 		<hr class="divider"></hr>
 
-		<ul class="nav nav-tabs" role="tablist">
+		<ul class="nav nav-tabs" role="tablist" id="tab-list">
 			<li class="active"><a href="#tab-chrome" role="tab"
 				data-toggle="tab">chrome</a></li>
 			<li><a href="#tab-firefox" role="tab" data-toggle="tab">Firefox</a></li>
@@ -189,16 +209,50 @@ hr.divider {
 				</div>
 			</div>
 		</div>
-
 	</div>
+	
+	<div class="container" id="footContainer">
+			<footer>
+			<p class="pull-right"><a href="#top">回到顶部</a></p>
+			<p>版权说明</p>
+		</footer>
+	</div>
+	
+	<div class="modal fade" id="helpModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button class="close" type="button" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+					<h4 class="modal-title">Modal title</h4>
+				</div>
+				<div class="modal-body">
+					<h1>HERE IS HELP BODY</h1>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-default" type="button" data-dismiss="modal">确认</button>
+				</div>
+			</div>
+		</div>
+	</div>
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="plugins/jquery-2.1.4/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="plugins/bootstrap-3.3.5/dist/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+/* $(function(){
+	$("#demo-navbar .dropdown-menu a").click(function(){
+		var href = $(this).attr("href");
+		$("#tab-list a[href='"+href+"']").tab("show");
+	})
+}) */
 
+function tabShow(id){
+	var href = $("#"+id).attr("href");
+	console.log(href);
+	$("#tab-list a[href='"+href+"']").tab("show");
+	//$("#tab-list li:eq("+count+") a").tab("show");
+}
+</script>
 
-
-
-
-	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-	<script src="plugins/jquery-2.1.4/jquery.min.js"></script>
-	<!-- Include all compiled plugins (below), or include individual files as needed -->
-	<script src="plugins/bootstrap-3.3.5/dist/js/bootstrap.min.js"></script>
 </body>
 </html>
