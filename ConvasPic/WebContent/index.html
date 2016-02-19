@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Convas 红包照片</title>
+<script src="js/jquery.min.js"></script>
+<link href="css/blur.css" rel="stylesheet" type="text/css">
+<!-- 响应式视图设置  -->
+<meta name="viewport"
+	content="height = device-height, width = device-width, initial-scale = 1.0, minimum-scale = 1.0, maximum-scale = 1.0, user-scalable = no"/> 
+</head> 
+<body>
+	<div id="blur-div">
+		<!-- 模糊的图片 -->
+		<img alt="" src="images/image.jpg" id="blur-image">
+		<!-- 覆盖显示的清晰图片 -->
+		<canvas id="canvas">
+		</canvas>
+		<a href="javascript:reset()" id="reset-button" class="button">RESET</a>
+		<a href="javascript:show()" id="show-button" class="button">SHOW</a>
+	</div>
+
+	<script src="js/blur.js"></script>
+</body>
+</html>
