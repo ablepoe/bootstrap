@@ -95,7 +95,7 @@ function reset(){
 	clearInterval(showAnimate);
 	clearInterval(resetAnimate);
 	//初始化参数
-	//随机初始话圆心坐标。确保圆心距离边界至少有一个半价的距离
+	//随机初始话圆心坐标。确保圆心距离边界至少有一个半径的距离
 	clippingRegion = {x: Math.random()*(canvas.width-2*radius) + radius, y: Math.random()*(canvas.height-2*radius) + radius, r: radius};
 	//渐变半径
 	var initRadius = 0;
