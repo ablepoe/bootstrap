@@ -30,6 +30,8 @@
     <result column="content" jdbcType="VARCHAR" property="content"/>
   </resultMap>
 
+  <sql id="coloums">ID,COMMAND,DESCRIPTION,CONTENT</sql>
+
   <select id="getAllList" parameterType="com.entity.MicroMessageParameter" resultMap="MessageResult">
     select ID,COMMAND,DESCRIPTION,CONTENT from message where 1=1
     <if test="command != null and !&quot;&quot;.equals(command.trim()) ">
@@ -43,7 +45,32 @@
   <delete id="removeOne" parameterType="String">
   	delete from message where ID = #{_parameter}
   </delete>
+  
+  <delete id="removeBatch" parameterType="java.util.List">
+  	delete from message where ID in (
+  		<foreach collection="list" index="i" item="item" separator=",">
+  			#{item}
+  		</foreach>
+  	)
+  </delete>
+  
+  <insert id="insertOne" parameterType="com.entity.MicroMessageParameter">
+  	insert into message(COMMAND,DESCRIPTION) VALUES(#{command} , #{description} )
+  </insert>
 
+  <select id="getLimitList" parameterType="java.util.Map" resultMap="MessageResult">
+  	select <include refid="coloums"/> from message
+  	<where>
+  		<if test="command != null and !&quot;&quot;.equals(command.trim()) ">
+  			command = #{microMessageParameter.command}
+  		</if>
+  		<if test="description != null and !&quot;&quot;.equals(description.trim())">
+  			description like '%' #{microMessageParameter.description} '%'
+  		</if>
+  	</where>
+  	order by ID limit #{page.startIndex} , #{page.pageMaxCounts}
+  </select>
+  
  <!--  <select id="version" parameterType="long" resultType="int">
     SELECT version FROM user WHERE id = #{id,jdbcType=INTEGER}
   </select>

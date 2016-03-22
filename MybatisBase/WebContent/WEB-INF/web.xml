@@ -2,7 +2,7 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
   <display-name>MybatisBase</display-name>
   <welcome-file-list>
-    <welcome-file>List.action</welcome-file>
+    <welcome-file>InitialTalk.action</welcome-file>
   </welcome-file-list>
   <servlet>
     <servlet-name>ListServlet</servlet-name>
@@ -27,5 +27,38 @@
   <servlet-mapping>
     <servlet-name>RemoveOne</servlet-name>
     <url-pattern>/RemoveOne.action</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>RemoveBatch</servlet-name>
+    <servlet-class>com.servlet.RemoveBatch</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RemoveBatch</servlet-name>
+    <url-pattern>/RemoveBatch.action</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>InsertOne</servlet-name>
+    <servlet-class>com.servlet.InsertOne</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>InsertOne</servlet-name>
+    <url-pattern>/insertOne.action</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>InitialTalk</servlet-name>
+    <servlet-class>com.servlet.InitialTalk</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>InitialTalk</servlet-name>
+    <url-pattern>/InitialTalk.action</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>AutoReplyServlet</servlet-name>
+    <servlet-class>com.servlet.AutoReplyServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AutoReplyServlet</servlet-name>
+    <url-pattern>/AutoReplyServlet.action</url-pattern>
   </servlet-mapping>
 </web-app>

@@ -1,22 +1,22 @@
 package com.dao;
 
 import java.io.IOException;
-import java.io.Reader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 import com.db.DBUtil;
+import com.entity.Command;
 import com.entity.MicroMessage;
 import com.entity.MicroMessageParameter;
+import com.entity.Page;
 
 /**
  * 
@@ -101,10 +101,83 @@ public class MessageDao {
 		}
 	}
 	
+	public void removeBatchMessage(List<String> IDs){
+		DBUtil dbUtil = new DBUtil();
+		SqlSession sqlSession = null;
+		try {
+			sqlSession = dbUtil.getSqlsession();
+			sqlSession.delete("Message.removeBatch",IDs);
+			sqlSession.commit();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally{
+			if(sqlSession != null){
+				sqlSession.close();
+			}
+		}
+	}
+	
+	public void insertOneMessage(MicroMessageParameter microMessageParameter){
+		DBUtil dbUtil = new DBUtil();
+		SqlSession sqlSession = null;
+		try {
+			sqlSession = dbUtil.getSqlsession();
+			sqlSession.insert("Message.insertOne",microMessageParameter);
+			sqlSession.commit();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally{
+			if(sqlSession != null){
+				sqlSession.close();
+			}
+		}
+	}
+	
+	public List<Command> queryRandomCommand(String command,String description){
+		DBUtil dbUtil = new DBUtil();
+		SqlSession sqlSession = null;
+		List<Command> commandList = new ArrayList<Command>();
+		try {
+			sqlSession = dbUtil.getSqlsession();
+			MicroMessageParameter messageParameter = new MicroMessageParameter();
+			messageParameter.setCommand(command);
+			messageParameter.setDescription(description);
+			commandList = sqlSession.selectList("Command.getAllList",messageParameter);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally{
+			if(sqlSession != null){
+				sqlSession.close();
+			}
+		}
+		return commandList;
+	}
+	
+	public List<MicroMessage> getLimitListByPage(Map<String,Object> parameter){
+		DBUtil dbUtil = new DBUtil();
+		List<MicroMessage> result = new ArrayList<MicroMessage>();
+		SqlSession sqlSession;
+		try {
+			sqlSession = dbUtil.getSqlsession();
+			IMessage imessage = sqlSession.getMapper(IMessage.class);
+			result = imessage.getLimitListByPage(parameter);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 	
 	public static void main(String[] args) {
 		MessageDao dao = new MessageDao();
-		dao.queryMessageListByMybatis("", "");
+		MicroMessageParameter microMessageParameter = new MicroMessageParameter();
+		microMessageParameter.setCommand(null);
+		microMessageParameter.setDescription(null);
+		Page page = new Page();
+//		page.setStartIndex(0);
+//		page.setDbCounts(5);
+		Map map = new HashMap();
+		map.put("page", page);
+		map.put("microMessageParameter", microMessageParameter);
+		System.out.println(dao.getLimitListByPage(map).size());
 	}
-	
 }

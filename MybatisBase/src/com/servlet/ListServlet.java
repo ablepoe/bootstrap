@@ -8,12 +8,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.alibaba.fastjson.JSON;
 import com.dao.MessageDao;
 import com.db.DBUtil;
 import com.entity.MicroMessage;
@@ -51,16 +54,29 @@ public class ListServlet extends HttpServlet {
 		//获取表单参数
 		String command = request.getParameter("command");
 		String description = request.getParameter("description");
+		String targetPage = request.getParameter("targetPage");
 		//返回查询制
 		request.setAttribute("command", command);
-		request.setAttribute("description", description);	
+		request.setAttribute("description", description);
+		request.setAttribute("targetPage", targetPage);
+		
 		MessageService messageService = new MessageService();
-		request.setAttribute("microMessageList", messageService.queryMessageListByMybatis(command, description));
-		/*try {
-			request.setAttribute("microMessageList", messageDao.queryMessageList(command, description));
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}*/
+		//使用mybatis拦截器分页
+		Map<String,Object> map = messageService.getLimitListByPage(command, description, targetPage);
+		//在mybatis sql 中进行分页
+//		Map<String,Object> map = messageService.getLimitList(command, description, targetPage);
+		
+		java.util.Iterator<Entry<String, Object>> it = map.entrySet().iterator();
+		while(it.hasNext()){
+			Entry entry = it.next();
+			System.out.println(entry.getKey());
+			System.out.println(entry.getValue());
+			System.out.println(JSON.toJSONString(entry.getValue()));
+		}
+		
+		request.setAttribute("microMessageList", map.get("microMessageList"));
+		request.setAttribute("page", map.get("page"));
+		
 		request.getRequestDispatcher("/WEB-INF/jsp/back/list.jsp").forward(request, response);
 	}
 
