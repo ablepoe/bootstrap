@@ -21,12 +21,25 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="CommandContent">
+<mapper namespace="com.dao.ICommandContent">
 
   <resultMap type="com.entity.CommandContent" id="CommandContent">
     <id column="id" jdbcType="INTEGER" property="id"/>
     <result column="content" jdbcType="VARCHAR" property="content"/>
     <result column="command_id" jdbcType="INTEGER" property="command_id"/>
   </resultMap>
+
+	<select id="getAllCommandContent" resultMap="CommandContent">
+		select <include refid="coloums"/> from COMMAND_CONTENT
+	</select>
+	
+	<insert id="insertCommandContent" parameterType="java.util.List">
+		insert into COMMAND_CONTENT(CONTENT,COMMAND_ID) values 
+		<foreach collection="list" item="item" separator=",">
+			(#{item.content},#{item.command_id})
+		</foreach>
+	</insert>
+
+	<sql id="coloums">ID,CONTENT,COMMAND_ID</sql>
 
 </mapper>

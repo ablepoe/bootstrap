@@ -52,7 +52,6 @@
     <servlet-name>InitialTalk</servlet-name>
     <url-pattern>/InitialTalk.action</url-pattern>
   </servlet-mapping>
-  
   <servlet>
     <servlet-name>AutoReplyServlet</servlet-name>
     <servlet-class>com.servlet.AutoReplyServlet</servlet-class>
@@ -60,5 +59,14 @@
   <servlet-mapping>
     <servlet-name>AutoReplyServlet</servlet-name>
     <url-pattern>/AutoReplyServlet.action</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>InsertBatch</servlet-name>
+    <servlet-class>com.servlet.InsertBatch</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>InsertBatch</servlet-name>
+    <url-pattern>/InsertBatch.action</url-pattern>
   </servlet-mapping>
 </web-app>

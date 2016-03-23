@@ -21,13 +21,13 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="Command">
+<mapper namespace="com.dao.ICommand">
 
   <resultMap type="com.entity.Command" id="CommandResult">
     <id column="aid" jdbcType="INTEGER" property="id"/>
     <result column="COMMAND" jdbcType="VARCHAR" property="command"/>
     <result column="DESCRIPTION" jdbcType="VARCHAR" property="description"/>
-    <collection property="contents" resultMap="CommandContent.CommandContent"/>
+    <collection property="contents" resultMap="com.dao.ICommandContent.CommandContent"/>
   </resultMap>
 
   <select id="getAllList" parameterType="com.entity.MicroMessageParameter" resultMap="CommandResult">
