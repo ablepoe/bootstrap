@@ -1,0 +1,29 @@
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+        "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<package name="default" namespace="/" extends="struts-default">
+	
+		<default-action-ref name="defaultAction"></default-action-ref>
+		<action name="defaultAction">
+			<result>/error.jsp</result>
+		</action>
+		
+		<action name="helloworld_*" method="{1}" class="com.struts2.HelloWorldAction">
+			<result name="input">/helloworld/input.jsp</result>
+			<result name="success">/helloworld/result.jsp</result>
+			<result name="error">/helloworld/error.jsp</result>
+			<result name="add">/helloworld/{1}.jsp</result>
+			<result name="update">/helloworld/{1}.jsp</result>
+			
+		</action>
+		
+		<action name="helloworld2_*" method="{1}" class="com.struts2.HelloWorldAction2">
+			<result name="input">/helloworld2/input.jsp</result>
+			<result name="success">/helloworld2/result.jsp</result>
+			<result name="error">/helloworld2/error.jsp</result>
+		</action>
+		
+	</package>
+	
+</struts>
