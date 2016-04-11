@@ -1,0 +1,37 @@
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+        "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<package name="default" namespace="/" extends="struts-default">
+		
+		<interceptors>
+			<interceptor name="timeIntercepter" class="com.intercepter.TimeActionIntercepter"></interceptor>
+			<interceptor name="authIntercepter" class="com.intercepter.UserAuthActionIntercepter"></interceptor>
+			<interceptor-stack name="myStack">
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+				<interceptor-ref name="timeIntercepter"></interceptor-ref>
+			</interceptor-stack>
+			<interceptor-stack name="myAuthStack">
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+				<interceptor-ref name="authIntercepter"></interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+	
+		<action name="timeAction" class="com.action.TimeAction">
+			<result name="success">/success.jsp</result>
+			<interceptor-ref name="myStack"></interceptor-ref>
+		</action>
+		
+		<action name="userAuth" class="com.action.UserAuthAction">
+			<result name="success">/authed.jsp</result>
+			<result name="error">/input.jsp</result>
+			<interceptor-ref name="myAuthStack"></interceptor-ref>
+		</action>
+		
+		<action name="login" class="com.action.UserAuthAction">
+			<result name="success">/authed.jsp</result>
+			<result name="error">/input.jsp</result>
+		</action>
+		
+	</package>
+</struts>
