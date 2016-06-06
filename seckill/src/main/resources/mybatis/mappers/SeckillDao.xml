@@ -1,0 +1,23 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dao.SeckillDao">
+
+	<select id="getAllSeckill" resultType="Seckill">
+		select id,name,num,startTime,endTime,creatTime from seckill
+	</select>
+
+	<select id="getSeckill" parameterType="long" resultType="Seckill">
+		select id,name,num,startTime,endTime,creatTime from seckill where id = #{_parameter}
+	</select>
+	
+	<update id="updateSeckill" parameterType="long">
+		update seckill set num = num - 1 where id = #{_parameter} and num > 0
+	</update>
+	
+	<insert id="insertSeckillRecord">
+		insert ignore into seckillRecord(id,user_phone,state) values (#{id},#{userPhone},#{state})
+	</insert>
+
+</mapper>
