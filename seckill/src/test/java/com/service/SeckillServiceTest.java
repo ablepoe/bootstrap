@@ -49,7 +49,7 @@ public class SeckillServiceTest {
 	}
 
 	@Test
-	@Ignore
+//	@Ignore
 	public void testExecuteSeckill() {
 		long id = 1000l;
 		long userPhone = 13916012313l;

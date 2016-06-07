@@ -5,7 +5,10 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
 import com.common.Common;
@@ -18,12 +21,13 @@ import com.service.SeckillService;
 
 /**
  * seckillService模块实现类
+ * 
  * @author hanliang
  *
  */
 @Service("SeckillService")
-public class SeckillServiceImpl implements SeckillService{
-	
+public class SeckillServiceImpl implements SeckillService {
+
 	@Resource
 	private SeckillDao seckillDao;
 
@@ -38,15 +42,18 @@ public class SeckillServiceImpl implements SeckillService{
 	}
 
 	@Override
-	public int executeSeckill(long id, long userPhone) throws SeckillRecordInsertException,SeckillUpdateException{
+	@Transactional(propagation = Propagation.REQUIRED)
+	public int executeSeckill(long id, long userPhone)
+			throws SeckillRecordInsertException, SeckillUpdateException {
 		int updateResult = seckillDao.updateSeckill(id);
 		int insertResult = 0;
-		if(updateResult > 0){
-			insertResult = seckillDao.insertSeckillRecord(id, userPhone, Common.STATE);
-			if(insertResult <= 0){
+		if (updateResult > 0) {
+			insertResult = seckillDao.insertSeckillRecord(id, userPhone,
+					Common.STATE);
+			if (insertResult <= 0) {
 				throw new SeckillRecordInsertException("insert error");
 			}
-		}else{
+		} else {
 			throw new SeckillUpdateException("update error");
 		}
 		return insertResult;
@@ -60,31 +67,38 @@ public class SeckillServiceImpl implements SeckillService{
 	@Override
 	public ExposerUrl getUrl(long id, long time) {
 		ExposerUrl exposerUrl = null;
-		boolean flag = false;
-		//秒杀对象
+		// 秒杀对象
 		Seckill seckill = seckillDao.getSeckill(id);
-		//time 传入时间
-		if(time > seckill.getEndTime().getTime()){
-			//秒杀已结束
-			exposerUrl = new ExposerUrl(id,Common.TIMEOVER,Common.getInfo(Common.TIMEOVER));
-			
-		}else if(time < seckill.getStartTime().getTime()){
-			//秒杀未开始
-			exposerUrl = new ExposerUrl(id,Common.NOTSTARTED,Common.getInfo(Common.NOTSTARTED));
-		}else{
-			//秒杀进行中
+		if(seckill == null){
+			exposerUrl = new ExposerUrl(id, Common.KILLOBJNOTEXIST, Common.getInfo(Common.KILLOBJNOTEXIST));
+		}
+		long endTime = seckill.getEndTime().getTime();
+		long startTime = seckill.getStartTime().getTime();
+		// time 传入时间
+		if (time > endTime) {
+			// 秒杀已结束
+			exposerUrl = new ExposerUrl(id, Common.TIMEOVER,
+					Common.getInfo(Common.TIMEOVER), startTime, endTime, time);
+
+		} else if (time < startTime) {
+			// 秒杀未开始
+			exposerUrl = new ExposerUrl(id, Common.NOTSTARTED,
+					Common.getInfo(Common.NOTSTARTED), startTime, endTime, time);
+		} else {
+			// 秒杀进行中
 			String md5 = getMD5(id);
-			exposerUrl = new ExposerUrl(id,Common.KILLING,md5,Common.getInfo(Common.KILLING));
+			exposerUrl = new ExposerUrl(id, Common.KILLING, md5,
+					Common.getInfo(Common.KILLING), startTime, endTime, time);
 		}
 		return exposerUrl;
 	}
 
-	private String getMD5(long id){
+	private String getMD5(long id) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(id);
 		sb.append("/");
 		sb.append(Common.SALT);
 		return DigestUtils.md5DigestAsHex(sb.toString().getBytes());
 	}
-	
+
 }
