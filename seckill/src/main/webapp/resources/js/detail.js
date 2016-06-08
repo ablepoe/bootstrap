@@ -20,6 +20,9 @@ var detail = {
 		},
 		getUrl : function(id){
 			return '/seckill/'+id+'/getUrl';
+		},
+		executeKill : function(id,md5){
+			return '/seckill/'+id+'/'+md5+'/executeSeckill';
 		}
 	},
 	checkMobile : function(str){
@@ -35,28 +38,38 @@ var detail = {
 			detail.btnClickCountDown();
 			clickDown = setInterval(detail.btnClickCountDown,1000);
 			//询问秒杀地址暴露
-			$.post(detail.url.getUrl(id),{'id':id },function(data){
+			$.post(detail.url.getUrl(id),{ },function(data){
 				console.log(data);
 				var exposer = data.data;
 				if(exposer.status == SUCCESSSTATUS){
 					//正处于秒杀状态中
 					//进行秒杀请求
-					detail.executeSeckill(id,exposer.md5);
+					detail.executeSeckill(id,exposer.md5,btn);
 				}else{
 					//不在秒杀状态中
 					btn.html('未开始');
-					btn.removeClass('btn-success disabled');
-					btn.addClass('btn-warn disabled');
+					btn.removeClass('btn-info disabled');
+					btn.addClass('btn-warning disabled');
 				}
 			})
 		});
 	},
-	executeSeckill : function(id,md5){
+	executeSeckill : function(id,md5,btn){
 		console.log(id);
 		console.log(md5);
-		/**
-		 * todo
-		 */
+		$.post(detail.url.executeKill(id, md5),{ } ,function(data){
+			console.log(data);
+			if(data.status){
+				clearInterval(clickDown);
+				btn.hide();
+//				btn.removeClass('btn-danger');
+//				btn.addClass('btn-success disabled');
+				$('#seckillMsg').hide().html('恭喜您秒杀成功'+data.message).show(300);
+			}else{
+				//clearInterval(clickDown);
+				$('#seckillMsg').hide().html('秒杀失败:'+data.message).show(300);
+			}
+		});
 	},
 	countDown : function(label,btn,id,nowTime,startTime,endTime){
 		if(nowTime > endTime){

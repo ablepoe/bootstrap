@@ -5,7 +5,7 @@ package com.exception;
  * @author hanliang
  *
  */
-public class SeckillUpdateException extends RuntimeException{
+public class SeckillUpdateException extends SeckillException{
 
 	/**
 	 * 

@@ -13,6 +13,8 @@ public class Common {
 	public static int KILLING = 1;
 	public static int KILLOBJNOTEXIST = -3;
 	
+	public static String KILLSUCCESS = "kill success!";
+	
 	public static String SALT = "@#!#%$%dsf9";
 	
 	public static boolean SUCCESS = true;

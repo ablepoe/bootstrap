@@ -14,6 +14,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.dto.ExposerUrl;
 import com.entity.Seckill;
+import com.exception.SeckillMD5UnmatchException;
 import com.exception.SeckillRecordInsertException;
 import com.exception.SeckillUpdateException;
 
@@ -53,13 +54,18 @@ public class SeckillServiceTest {
 	public void testExecuteSeckill() {
 		long id = 1000l;
 		long userPhone = 13916012313l;
+		long time = new Date().getTime();
+		ExposerUrl exposerUrl = seckillService.getUrl(id, time);
+		String md5 = exposerUrl.getMd5();
 		try{
-			int result = seckillService.executeSeckill(id, userPhone);
+			int result = seckillService.executeSeckill(id, userPhone, md5);
 			System.out.println(result);
 		}catch(SeckillRecordInsertException e){
 			e.printStackTrace();
 		}catch(SeckillUpdateException e1){
 			e1.printStackTrace();
+		}catch(SeckillMD5UnmatchException e3){
+			e3.printStackTrace();
 		}catch(Exception e2){
 			e2.printStackTrace();
 		}

@@ -5,7 +5,7 @@ package com.exception;
  * @author hanliang
  *
  */
-public class SeckillRecordInsertException extends RuntimeException{
+public class SeckillRecordInsertException extends SeckillException{
 
 	/**
 	 * 

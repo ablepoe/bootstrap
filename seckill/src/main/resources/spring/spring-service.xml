@@ -8,9 +8,6 @@
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-	<!-- 引用dao模块 -->
-	<import resource="classpath:spring/spring-dao.xml"/>
-	
 	<!-- 开启spring注解 -->
 	<context:annotation-config />
 	

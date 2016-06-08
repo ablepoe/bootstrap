@@ -15,6 +15,7 @@ import com.common.Common;
 import com.dao.SeckillDao;
 import com.dto.ExposerUrl;
 import com.entity.Seckill;
+import com.exception.SeckillMD5UnmatchException;
 import com.exception.SeckillRecordInsertException;
 import com.exception.SeckillUpdateException;
 import com.service.SeckillService;
@@ -43,8 +44,11 @@ public class SeckillServiceImpl implements SeckillService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public int executeSeckill(long id, long userPhone)
-			throws SeckillRecordInsertException, SeckillUpdateException {
+	public int executeSeckill(long id, long userPhone, String md5)
+			throws SeckillRecordInsertException, SeckillUpdateException, SeckillMD5UnmatchException {
+		if(!md5.equals(getMD5(id))){
+			throw new SeckillMD5UnmatchException("md5 unmatch");
+		}
 		int updateResult = seckillDao.updateSeckill(id);
 		int insertResult = 0;
 		if (updateResult > 0) {

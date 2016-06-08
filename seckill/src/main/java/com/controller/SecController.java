@@ -8,16 +8,19 @@ import javax.annotation.Resource;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.common.Common;
 import com.dto.ExposerUrl;
 import com.dto.ResponseDto;
 import com.entity.Seckill;
+import com.exception.SeckillMD5UnmatchException;
+import com.exception.SeckillRecordInsertException;
+import com.exception.SeckillUpdateException;
 import com.service.SeckillService;
 
 /**
@@ -47,9 +50,23 @@ public class SecController {
 		return "detail";
 	}
 	
-	@RequestMapping(value = "/executeSeckill")
-	public void executeSeckill(){
-		
+	@ResponseBody
+	@RequestMapping(value = "/{id}/{md5}/executeSeckill", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	public ResponseDto<Object> executeSeckill(@PathVariable("id") Long id, @PathVariable("md5") String md5,@CookieValue("phone") Long userPhone){
+		ResponseDto<Object> responseDto;
+		try{
+			seckillService.executeSeckill(id, userPhone, md5);
+			responseDto = new ResponseDto<Object>(true, Common.KILLSUCCESS);
+		}catch(SeckillRecordInsertException e){
+			responseDto = new ResponseDto<Object>(false, e.getMessage());
+		}catch(SeckillUpdateException e1){
+			responseDto = new ResponseDto<Object>(false, e1.getMessage());
+		}catch(SeckillMD5UnmatchException e2){
+			responseDto = new ResponseDto<Object>(false, e2.getMessage());
+		}catch(Exception e3){
+			responseDto = new ResponseDto<Object>(false, e3.getMessage());
+		}
+		return responseDto;
 	}
 	
 	@ResponseBody
@@ -61,8 +78,8 @@ public class SecController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "{id}/getUrl" , method = RequestMethod.POST)
-	public ResponseDto<ExposerUrl> getUrl(@PathVariable("id") long id){
+	@RequestMapping(value = "{id}/getUrl" , method = RequestMethod.POST, produces="application/json;charset=UTF-8")
+	public ResponseDto<ExposerUrl> getUrl(@PathVariable("id") Long id){
 		try{
 			Date date = new Date();
 			ExposerUrl exposerurl =  seckillService.getUrl(id, date.getTime());

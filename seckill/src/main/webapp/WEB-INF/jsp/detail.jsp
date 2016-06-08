@@ -42,6 +42,7 @@
 		  <div class="panel-body">
 		    <p><span class="glyphicon glyphicon-phone"></span><label id="countDown" class="label label-default">temp</label></p>
 		    <p><button id="seckillBtn" class="btn btn-default">抢购</button></p>
+		    <p><label id="seckillMsg" class="label label-danger"></label></p>
 		  </div>
 		</div>
 		
