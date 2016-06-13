@@ -1,6 +1,7 @@
 package com.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -25,4 +26,6 @@ public interface SeckillDao {
 	//记录秒杀结果
 	public int insertSeckillRecord(@Param("id") long id, @Param("userPhone") long userPhone, @Param("state") int state);
 
+	//调用mysql存储过程执行秒杀
+	public void executeSeckillByProcedure(Map<String,Object> map);
 }

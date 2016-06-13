@@ -30,5 +30,10 @@ public interface SeckillService {
 	
 	//暴露秒杀接口
 	public ExposerUrl getUrl(long id, long time);
+
+	//调用mysql存储过程
+	public int executeSeckillByProcedure(long id, long userPhone, String md5)
+			throws SeckillRecordInsertException, SeckillUpdateException,
+			SeckillMD5UnmatchException;
 	
 }

@@ -1,10 +1,13 @@
 package com.service.impl;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.collections4.MapUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -15,6 +18,7 @@ import com.common.Common;
 import com.dao.SeckillDao;
 import com.dto.ExposerUrl;
 import com.entity.Seckill;
+import com.exception.SeckillException;
 import com.exception.SeckillMD5UnmatchException;
 import com.exception.SeckillRecordInsertException;
 import com.exception.SeckillUpdateException;
@@ -105,4 +109,29 @@ public class SeckillServiceImpl implements SeckillService {
 		return DigestUtils.md5DigestAsHex(sb.toString().getBytes());
 	}
 
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	public int executeSeckillByProcedure(long id, long userPhone, String md5)
+			throws SeckillRecordInsertException, SeckillUpdateException, SeckillMD5UnmatchException {
+		if(!md5.equals(getMD5(id))){
+			throw new SeckillMD5UnmatchException("md5 unmatch");
+		}
+		Date date = new Date();
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("seckillId", id);
+		map.put("phone", userPhone);
+		map.put("killTime", date);
+		map.put("result", null);
+		seckillDao.executeSeckillByProcedure(map);
+		int result = MapUtils.getInteger(map, "result", -2);
+		switch(result){
+			case 0: throw new SeckillUpdateException("update error");
+			case 1: return result;
+			case -1: throw new SeckillRecordInsertException("insert error");
+			case -2: throw new SeckillException("inner error");
+			default: throw new SeckillException("default inner error");
+		}
+	}
+	
 }

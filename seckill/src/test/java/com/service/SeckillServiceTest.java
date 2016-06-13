@@ -50,7 +50,7 @@ public class SeckillServiceTest {
 	}
 
 	@Test
-//	@Ignore
+	@Ignore
 	public void testExecuteSeckill() {
 		long id = 1000l;
 		long userPhone = 13916012313l;
@@ -85,6 +85,28 @@ public class SeckillServiceTest {
 		long time = new Date().getTime();
 		ExposerUrl exposerUrl = seckillService.getUrl(id, time);
 		System.out.println(exposerUrl.toString());
+	}
+	
+	@Test
+//	@Ignore
+	public void testExecuteSeckillByProcedure() {
+		long id = 1000l;
+		long userPhone = 13916012313l;
+		long time = new Date().getTime();
+		ExposerUrl exposerUrl = seckillService.getUrl(id, time);
+		String md5 = exposerUrl.getMd5();
+		try{
+			int result = seckillService.executeSeckillByProcedure(id, userPhone, md5);
+			System.out.println(result);
+		}catch(SeckillRecordInsertException e){
+			e.printStackTrace();
+		}catch(SeckillUpdateException e1){
+			e1.printStackTrace();
+		}catch(SeckillMD5UnmatchException e3){
+			e3.printStackTrace();
+		}catch(Exception e2){
+			e2.printStackTrace();
+		}
 	}
 
 }
